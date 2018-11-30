@@ -2,14 +2,14 @@ var casper = require('casper').create({
     colorizerType: 'Dummy',
 	verbose: true,
     pageSettings: {
-        loadImages: false,//The script is much faster when this field is set to false
+        loadImages: false,
         loadPlugins: true,
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36 OPR/56.0.3051.36'
     },
    clientScripts: [
-			'D:\\WorkSpace\\Tools\\_jq_.js',
-			'D:\\WorkSpace\\Tools\\csvExport.js',
-			'D:\\WorkSpace\\Tools\\_main_.js'
+			'_jq_.js',
+			'csvExport.js',
+			'_main_.js'
 		],
    viewportSize: {
         width: 1600,
@@ -41,9 +41,9 @@ var application = {
        getData: function() {
            formIndex = casper.cli.get('kind') == "domains" ? 2 : 1;
            kind = formIndex == 2 ? 'D' : 'I';
-           application.global.dataFile = "D://WorkSpace//Tools//input//" + casper.cli.get('kind') + ".txt";
+           application.global.dataFile = casper.cli.get('kind') + ".txt";
            application.getdomains();
-       },// dont
+       },
        getdomains: function() {
            var self = this;
            var details = fs.read(application.global.dataFile).split("\n");
@@ -133,15 +133,8 @@ var application = {
                                  if(URIBL == "Listed") { blackListsDomains += ' - URIBL'; }
                                  
                                  if(blackListsDomains !== ''){
-                                    //var value = application.global.currentValue + blackListsDomains;
-                                    //fs.write('D://WorkSpace//Tools//ListedDomains.txt', value + "\n", "a");
-                                    this.evaluate(function() {
-                                        //var args = [$('body>center>div>div>div>table'), 'D://WorkSpace//Tools//bbResultDomains.csv'];
-                                        $('body>center>div>div>div>table').csvExport({
-                                            escapeContent:true
-                                          });
-
-                                    });
+                                    var value = application.global.currentValue + blackListsDomains;
+                                    fs.write('ListedDomains.txt', value + "\n", "a");
                                     index++;
                                  }
                                  
